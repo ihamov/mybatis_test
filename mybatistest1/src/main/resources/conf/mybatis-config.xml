@@ -10,6 +10,35 @@
      <properties resource="dbconfig.properties">
      </properties>
      
+     <!-- 
+        setting包含很多重要的配置
+      -->
+      <settings>
+        <!-- 是否开启自动驼峰命名规则（camel case）映射，
+                                        即从经典数据库列名 A_COLUMN 到
+                                        经典 Java 属性名 aColumn 的类似映射。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+      </settings>
+      
+     <!-- 
+        typeAliases:类型别名是为 Java 类型设置一个短的名字。它只和 XML 配置有关，
+                                                            存在的意义仅在于用来减少类完全限定名的冗余。
+        type:指定要配置别名的类，alias不配置时，默认值为类名小写，否则取alias的值。
+                        别名本身是不区分大小写的。
+        
+                                                            
+      --> 
+      <typeAliases>
+        <typeAlias alias="Employee" type="com.du.mybatis.bean.Employee"/>
+        
+        <!-- 
+                            批量起别名。
+                            包含子包同时存在同名类时可能会报错，需要使用@Alias("author")注解，在其中一个上进行区分。
+         -->
+        <package name="com.du.mybatis.bean"/>
+        
+      </typeAliases>
+     
      
 	<environments default="development">
 		<environment id="development">

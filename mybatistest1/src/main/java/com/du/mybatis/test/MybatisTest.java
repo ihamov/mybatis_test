@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.du.mybatis.bean.Employee;
 import com.du.mybatis.dao.EmployeeMapper;
+import com.du.mybatis.dao.EmployeeMapperAnnotation;
 
 public class MybatisTest {
     
@@ -82,10 +83,26 @@ public class MybatisTest {
         }finally{
             sqlSession.close();
         }
+    }
+    
+    
+    @Test
+    public void testAnnotation() throws IOException{
+        SqlSession sqlSession = getSqlSession();
         
         
-        
-        
+        try {
+            EmployeeMapperAnnotation employeeMapperAnnotation = sqlSession.getMapper(EmployeeMapperAnnotation.class);
+            
+            Employee employee = employeeMapperAnnotation.getEmpById(1);
+            
+            System.out.println(employee);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            sqlSession.close();
+        }
     }
 
 }

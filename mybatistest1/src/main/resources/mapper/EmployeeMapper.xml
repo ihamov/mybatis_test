@@ -55,5 +55,21 @@
     <delete id="deleteEmpById">
         delete from tbl_employee where id=#{id}
     </delete>
+    
+    <!-- public Employee getEmpByIdAndLastName(Integer id, String lastName); -->
+    
+    <select id="getEmpByIdAndLastName" resultType="com.du.mybatis.bean.Employee">
+        select id,last_name lastName,email,gender from tbl_employee where id=#{id} and last_name=#{lastName}
+    </select>
+    
+    <!-- public Employee getEmpByEmp(Employee employee); -->
+    <select id="getEmpByEmp" resultType="com.du.mybatis.bean.Employee">
+        select id,last_name lastName,email,gender from tbl_employee where id=#{id} and last_name=#{lastName}
+    </select>
+    
+    <!-- public Employee getEmpByMap(Map<String, Object> paraMap); -->
+    <select id="getEmpByMap" resultType="com.du.mybatis.bean.Employee">
+        select id,last_name lastName,email,gender from tbl_employee where id=#{id} and last_name=#{lastName}
+    </select>
 
 </mapper>

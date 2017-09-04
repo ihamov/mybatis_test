@@ -2,6 +2,8 @@ package com.du.mybatis.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.print.attribute.standard.Finishings;
 
@@ -190,6 +192,34 @@ public class MybatisTest {
             sqlSession.close();
         }
     }
-    
+    @Test
+    public void testMutilParamter() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            Employee employee = employeeMapper.getEmpByIdAndLastName(1, "tom");
+            System.out.println(employee);
+            
+            Employee employeeParam = new Employee();
+            employeeParam.setId(2);
+            employeeParam.setLastName("jerry");            
+            Employee empByEmp = employeeMapper.getEmpByEmp(employeeParam);
+            System.out.println(empByEmp);
+            
+            Map<String, Object> paraMap = new HashMap<String, Object>();
+            paraMap.put("id", 3);
+            paraMap.put("lastName", "limei");
+            Employee empByMap = employeeMapper.getEmpByMap(paraMap);
+            System.out.println(empByMap);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+    }
 
 }

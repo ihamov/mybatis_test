@@ -38,7 +38,17 @@
         <package name="com.du.mybatis.bean"/>
         
       </typeAliases>
-     
+      <!-- 
+      databaseIdProvider支持多数据库厂商 
+      type="DB_VENDOR"：作用，得到数据库厂商标识，mybatis根据厂商标识执行不同的sql
+      
+      -->
+     <databaseIdProvider type="DB_VENDOR">
+        <!-- 为不同数据库起别名 ,另外需要在Mapper，xml文件中配置databaseId，告诉该SQL属于哪个数据库-->
+        <property name="MySQL" value="mysql"/>
+        <property name="Oracle" value="oracle"/>
+        <property name="SQL Server" value="sqlserver"/>
+     </databaseIdProvider>
      
 	<environments default="development">
 		<environment id="development">

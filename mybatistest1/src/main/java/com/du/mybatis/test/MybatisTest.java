@@ -26,6 +26,14 @@ public class MybatisTest {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         return sqlSession;
     }
+    private SqlSession getSqlSession(boolean isAutoCommit) throws IOException {
+        String resource = "conf/mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory =  new SqlSessionFactoryBuilder().build(inputStream);
+        //获取SqlSession
+        SqlSession sqlSession = sqlSessionFactory.openSession(isAutoCommit);
+        return sqlSession;
+    }
     /**
      * 1、根据xml配置文件（全局配置文件）创建一个SqlSessionFactory对象 有数据源一些运行环境信息
      * 2、sql映射文件；配置了每一个sql，以及sql的封装规则等。 
@@ -85,7 +93,10 @@ public class MybatisTest {
         }
     }
     
-    
+    /**
+     * 测试注解
+     * @throws IOException
+     */
     @Test
     public void testAnnotation() throws IOException{
         SqlSession sqlSession = getSqlSession();
@@ -104,5 +115,81 @@ public class MybatisTest {
             sqlSession.close();
         }
     }
+    
+    /**
+     * 测试增加
+     * @throws IOException 
+     */
+    @Test
+    public void testAdd() throws IOException{
+        SqlSession sqlSession = getSqlSession(true);
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            Employee employee = new Employee();
+            employee.setLastName("lixue");
+            employee.setEmail("lixue@163.com");
+            employee.setGender("1");
+            
+            employeeMapper.addEmp(employee);
+            System.out.println(employee);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+    }
+    
+    /**
+     * 测试修改
+     * @throws IOException 
+     */
+    @Test
+    public void testUpdate() throws IOException{
+        SqlSession sqlSession = getSqlSession(true);
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            Employee employee = new Employee();
+            employee.setId(2);
+            employee.setLastName("jerry");
+            employee.setEmail("jerry@126.com");
+            employee.setGender("1");
+            
+            employeeMapper.updateEmp(employee);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+    }
+    
+    /**
+     * 测试删除
+     * @throws IOException 
+     */
+    @Test
+    public void testDelete() throws IOException{
+        SqlSession sqlSession = getSqlSession(true);
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            employeeMapper.deleteEmpById(2);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+    }
+    
 
 }

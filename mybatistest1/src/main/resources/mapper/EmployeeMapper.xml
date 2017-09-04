@@ -3,15 +3,57 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.du.mybatis.dao.EmployeeMapper">
-<!-- 
-namespace:名称空间;指定为接口的全类名
-id：唯一标识
-resultType：返回值类型
-#{id}：从传递过来的参数中取出id值
-
-public Employee getEmpById(Integer id);
- -->
+	<!-- 
+	namespace:名称空间;指定为接口的全类名
+	id：唯一标识
+	resultType：返回值类型
+	#{id}：从传递过来的参数中取出id值
+	
+	public Employee getEmpById(Integer id);
+	 -->
 	<select id="getEmpById" resultType="com.du.mybatis.bean.Employee" databaseId="mysql">
 		select id,last_name lastName,email,gender from tbl_employee where id = #{id}
 	</select>
+	
+    <!-- public void addEmp(Employee employee) -->
+    <!-- parameterType可以省略 -->
+    <!-- 
+        mysql支持自增主键， 
+                        设置useGeneratedKeys为true即可，
+        keyProperty:主键属性                
+                        注意返回的值在Employeed对象中，getId()可获取
+    -->
+    <insert id="addEmp" useGeneratedKeys="true" keyProperty="id" parameterType="com.du.mybatis.bean.Employee" databaseId="mysql">
+        insert into tbl_employee (last_name, email, gender)
+        values(#{lastName},#{email},#{gender})
+    </insert>
+    <!-- 
+        Oracle数据库配置：oracle使用的序列自增的                
+    -->
+    <insert id="addEmp" parameterType="com.du.mybatis.bean.Employee" databaseId="oracle">
+        <!-- 
+            keyProperty:查询后的主键封装给哪个字段
+            order="BEFORE":当前sql在插入之前运行
+            resultType="Integer":主键返回值类型
+         -->
+        <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
+            <!-- 编写查询主键的SQL -->
+            select EMPLOYEE_SEQ.nextval from dual
+        </selectKey>
+        insert into tbl_employee (last_name, email, gender)
+        values(#{lastName},#{email},#{gender})
+    </insert>
+    
+    	
+    <!-- public void updateEmp(Employee employee) -->
+    <update id="updateEmp">
+        update tbl_employee set last_name=#{lastName}, email=#{email}, gender=#{gender}
+        where id = #{id}
+    </update>
+    
+    <!-- public void deleteEmpById(Integer id) -->
+    <delete id="deleteEmpById">
+        delete from tbl_employee where id=#{id}
+    </delete>
+
 </mapper>

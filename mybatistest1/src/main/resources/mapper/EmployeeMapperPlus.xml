@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.du.mybatis.dao.EmployeeMapperPlus">
+    <!-- 
+        type：自定义规则的java类型
+        id:唯一标识，以便引用
+    -->
+    <resultMap type="com.du.mybatis.bean.Employee" id="MyEmp">
+        <!-- 
+                                主键列使用id，其他列使用result
+           property java属性字段名
+           column 数据库字段名
+         -->
+        <id property="id" column="id"/>
+        <result property="lastName" column="last_name"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+    </resultMap>
+    
+    
+    
+    <!-- public Employee getEmpById(Integer id); -->
+    <select id="getEmpById" resultMap="MyEmp">
+        select id, last_name, email, gender from tbl_employee where id= #{id}
+    </select>
+    
+    
+</mapper>

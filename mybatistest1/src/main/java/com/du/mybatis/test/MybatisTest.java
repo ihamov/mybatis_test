@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.du.mybatis.bean.Employee;
 import com.du.mybatis.dao.EmployeeMapper;
 import com.du.mybatis.dao.EmployeeMapperAnnotation;
+import com.du.mybatis.dao.EmployeeMapperPlus;
 
 public class MybatisTest {
     
@@ -287,4 +288,25 @@ public class MybatisTest {
         }
         
     }
+    
+    @Test
+    public void testgetEmployeeByIdUsedResultMap() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            EmployeeMapperPlus employeeMapperPlus = sqlSession.getMapper(EmployeeMapperPlus.class);
+            
+            Employee employee = employeeMapperPlus.getEmpById(1);
+            
+            System.out.println(employee);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+        
+    }
+    
 }

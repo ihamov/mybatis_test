@@ -76,5 +76,15 @@
     <select id="getEmpsByLastNameLike" resultType="com.du.mybatis.bean.Employee">
         select id,last_name lastName,email,gender from tbl_employee where last_name like #{lastName}
     </select>
+    
+    <!-- public Map<String, Object> getEmpByIdReturnMap(Integer id); -->
+    <select id="getEmpByIdReturnMap" resultType="map">
+        select id,last_name lastName,email,gender from tbl_employee where id= #{id}
+    </select>
+    
+    <!-- public Map<Integer, Employee> getEmpsByLastNameReturnMap(String lastName); -->
+    <select id="getEmpsByLastNameReturnMap" resultType="com.du.mybatis.bean.Employee">
+        select id,last_name lastName,email,gender from tbl_employee where last_name like #{lastName}
+    </select>
 
 </mapper>

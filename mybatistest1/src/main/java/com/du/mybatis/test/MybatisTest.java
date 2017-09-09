@@ -5,8 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.print.attribute.standard.Finishings;
+import java.util.Map.Entry;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -233,6 +232,51 @@ public class MybatisTest {
             
             for(Employee emp:empsByLastNameLike){
                 System.out.println(emp);
+            }
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+        
+    }
+    
+    @Test
+    public void testResultMap() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            Map<String, Object> empByIdReturnMap = employeeMapper.getEmpByIdReturnMap(1);
+            
+            for(Entry<String, Object> entry:empByIdReturnMap.entrySet()){
+                System.out.println("key:"+entry.getKey());
+                System.out.println("value:"+entry.getValue());
+            }
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+        
+    }
+    @Test
+    public void testResultEmployeeMap() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            Map<Integer, Employee> empsByLastNameReturnMap = employeeMapper.getEmpsByLastNameReturnMap("%e%");
+            
+            for(Entry<Integer, Employee> entry:empsByLastNameReturnMap.entrySet()){
+                System.out.println("key:"+entry.getKey().toString());
+                System.out.println("value:"+entry.getValue().toString());
             }
             
             

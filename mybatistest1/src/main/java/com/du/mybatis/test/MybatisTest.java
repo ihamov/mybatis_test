@@ -3,6 +3,7 @@ package com.du.mybatis.test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.print.attribute.standard.Finishings;
@@ -221,5 +222,25 @@ public class MybatisTest {
             sqlSession.close();
         }
     }
-
+    @Test
+    public void testResultList() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            
+            List<Employee> empsByLastNameLike = employeeMapper.getEmpsByLastNameLike("%e%");
+            
+            for(Employee emp:empsByLastNameLike){
+                System.out.println(emp);
+            }
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+        
+    }
 }

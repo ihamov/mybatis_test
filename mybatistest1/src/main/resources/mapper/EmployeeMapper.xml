@@ -71,5 +71,10 @@
     <select id="getEmpByMap" resultType="com.du.mybatis.bean.Employee">
         select id,last_name lastName,email,gender from tbl_employee where id=#{id} and last_name=#{lastName}
     </select>
+    
+    <!-- public List<Employee> getEmpsByLastNameLike(String lastName); -->
+    <select id="getEmpsByLastNameLike" resultType="com.du.mybatis.bean.Employee">
+        select id,last_name lastName,email,gender from tbl_employee where last_name like #{lastName}
+    </select>
 
 </mapper>

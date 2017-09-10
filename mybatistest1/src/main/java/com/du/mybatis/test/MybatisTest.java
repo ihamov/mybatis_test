@@ -13,7 +13,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
+import com.du.mybatis.bean.Department;
 import com.du.mybatis.bean.Employee;
+import com.du.mybatis.dao.DepartmentMapper;
 import com.du.mybatis.dao.EmployeeMapper;
 import com.du.mybatis.dao.EmployeeMapperAnnotation;
 import com.du.mybatis.dao.EmployeeMapperPlus;
@@ -316,11 +318,31 @@ public class MybatisTest {
         try {
             EmployeeMapperPlus employeeMapperPlus = sqlSession.getMapper(EmployeeMapperPlus.class);
             
-            Employee employee = employeeMapperPlus.getEmpAndDeptById(1);
-            Employee employee2 = employeeMapperPlus.getEmpAndDeptById2(1);
+            //Employee employee = employeeMapperPlus.getEmpAndDeptById(1);
+            Employee employee2 = employeeMapperPlus.getEmpAndDeptById2(4);
             
-            System.out.println(employee);
+            //System.out.println(employee);
             System.out.println(employee2);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+        
+    }
+    
+    @Test
+    public void testgetDeptAndEmployeesById() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);
+            //Department department = departmentMapper.getDeptAndEmpById(1);
+            Department department2 = departmentMapper.getDeptAndEmpById2(1);
+            
+            System.out.println(department2);
             
             
         } catch (Exception e) {

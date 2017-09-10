@@ -68,7 +68,10 @@
         <result property="lastName" column="last_name"/>
         <result column="email" property="email"/>
         <result column="gender" property="gender"/>
-        <!-- 定义关联对象 -->
+        <!-- 
+                                定义关联对象 
+          column:将该字段作为参数传递给select作为入参
+        -->
         <association property="dept" column="dept_id" select="com.du.mybatis.dao.DepartmentMapper.getDeptById"></association>
     </resultMap>
     
@@ -78,7 +81,10 @@
         <result property="lastName" column="last_name"/>
         <result column="email" property="email"/>
         <result column="gender" property="gender"/>
-        <!-- 定义关联对象 -->
+        <!-- 
+                                定义关联对象 
+          column:将该字段作为参数传递给select作为入参
+        -->
         <association property="dept" column="dept_id" select="queryDeptById"></association>
     </resultMap>
     <!-- 
@@ -97,7 +103,41 @@
         select id,dept_name departmentName from tbl_dept where id=#{id}
     </select>
     
-    
+    <!-- ================================ -->
+    <!-- 
+        resultMap中有一个discriminator标签，鉴别器：可以使用discriminator判断某列的值，然后根据某列的值改变封装行为
+        <discriminator javaType=""></discriminator>
+                        例如：Employee
+                        如果查出是女生，查出部门信息，
+                        如果是男生，不查询部门信息，同时把last_Name这一列赋值给email;
+                        参见MyDifEmp5配置
+        
+     -->
+     <resultMap type="com.du.mybatis.bean.Employee" id="MyDifEmp5">
+        <id column="id" property="id"/>
+        <result property="lastName" column="last_name"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <!-- 
+            column:需要判断的列
+            javaType：列值对应的java类型
+         -->
+        <discriminator javaType="string" column="gender">
+            <!-- 女生 resultType：指定封装的结果类型 -->
+            <case value="0" resultType="com.du.mybatis.bean.Employee">
+		        <association property="dept" column="dept_id" select="com.du.mybatis.dao.DepartmentMapper.getDeptById"></association>
+            </case>
+            <!-- 男生  resultType：指定封装的结果类型 -->
+            <case value="1" resultType="com.du.mybatis.bean.Employee">
+                <!-- 等于说，重新配置规则 -->
+                <id column="id" property="id"/>
+                <result column="last_name" property="lastName"/>
+                <result column="last_name" property="email"/>
+                <result column="gender" property="gender"/>
+            </case>
+        </discriminator>
+        
+     </resultMap>
     
     
 </mapper>

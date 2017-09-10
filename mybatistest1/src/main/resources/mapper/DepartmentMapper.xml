@@ -9,4 +9,54 @@
     <select id="getDeptById" resultType="com.du.mybatis.bean.Department">
         select id,dept_name departmentName from tbl_dept where id=#{id}
     </select>
+    
+    <!-- 嵌套结果的方式 -->
+    <resultMap type="com.du.mybatis.bean.Department" id="MyDeptMap">
+        <id column="id" property="id"/>
+        <result column="dept_name" property="departmentName"/>
+        <!-- 
+                                定义集合级联关系
+          collection:做一对多关联查询
+          ofType：指定集合中元素对象的类型
+         -->
+        <collection property="emps" ofType="com.du.mybatis.bean.Employee">
+            <!-- 此处需要注意， tbl_dept tbl_employee 主键都为id，此处需要区分，因此在sql中取别名，否则会有问题-->
+            <id column="e_id" property="id"/>
+            <result property="lastName" column="last_name"/>
+            <result column="email" property="email"/>
+            <result column="gender" property="gender"/>
+        </collection>
+    </resultMap>
+    
+    <!-- public Department getDeptAndEmpById(Integer id); -->
+    <select id="getDeptAndEmpById" resultMap="MyDeptMap">
+        SELECT d.id,d.dept_name,e.id e_id,e.last_name,e.gender,e.email,e.dept_id 
+        FROM tbl_dept d, tbl_employee e 
+        WHERE d.id=e.dept_id and d.id=#{id}
+    </select>
+    
+    
+    <!-- 嵌套查询的方式 -->
+    <resultMap type="com.du.mybatis.bean.Department" id="MyDeptMap2">
+        <id column="id" property="id"/>
+        <result column="dept_name" property="departmentName"/>
+        <!-- 
+            column:将该字段作为参数传递给select作为入参 
+                                    注意：column也可以传多个列值，写法为column="{key1=column1,key2=column2}",
+                                    此处也可以写成column="{dept_id=id}"
+            select：可以是一条另外的sql作为参数（此例写法），也可以传入一个mapper的接口方法（具体可参考一对一的例子）
+            fetchType:单独配置延迟加载 ，lazy为延迟，eager为立即
+        -->
+        <collection property="emps" column="id" select="queryEmpsByDeptId"></collection>
+    </resultMap>
+    <select id="queryEmpsByDeptId" resultType="com.du.mybatis.bean.Employee">
+        SELECT id,last_name lastName,gender,email FROM tbl_employee WHERE dept_id=#{dept_id};
+    </select>
+    
+    <!-- public Department getDeptAndEmpById2(Integer id); -->
+    <select id="getDeptAndEmpById2" resultMap="MyDeptMap2">
+        SELECT id,dept_name FROM tbl_dept WHERE id=#{id}
+    </select>
+    
+    
  </mapper>

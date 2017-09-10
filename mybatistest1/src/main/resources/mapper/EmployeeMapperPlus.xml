@@ -7,7 +7,7 @@
         type：自定义规则的java类型
         id:唯一标识，以便引用
     -->
-    <resultMap type="com.du.mybatis.bean.Employee" id="MyEmp">
+    <resultMap type="com.du.mybatis.bean.Employee" id="MySimpleEmp">
         <!-- 
                                 主键列使用id，其他列使用result
            property java属性字段名
@@ -22,9 +22,82 @@
     
     
     <!-- public Employee getEmpById(Integer id); -->
-    <select id="getEmpById" resultMap="MyEmp">
+    <select id="getEmpById" resultMap="MySimpleEmp">
         select id, last_name, email, gender from tbl_employee where id= #{id}
     </select>
+    <!-- 一对一关系写法1 级联属性封装结果集-->
+    <resultMap type="com.du.mybatis.bean.Employee" id="MyDifEmp1">
+        <id column="id" property="id"/>
+        <result property="lastName" column="last_name"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <result property="dept.id" column="dept_id"/>
+        <result property="dept.departmentName" column="dept_name"/>
+    </resultMap>
+    <!-- 一对一关系写法2 使用association -->
+    <resultMap type="com.du.mybatis.bean.Employee" id="MyDifEmp2">
+        <id column="id" property="id"/>
+        <result property="lastName" column="last_name"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <!-- 
+            association指定级联的Javabean对象
+            property指定该对象的字段名称
+            javaType指定对象类型（必填）
+         -->
+        <association property="dept" javaType="com.du.mybatis.bean.Department">
+            <id column="id" property="id"/>
+            <result column="dept_name" property="departmentName"/>
+        </association>
+    </resultMap>
+    
+    <!-- 
+                    查询Employee同时查出所属部门Department
+       resultMap:可以选择MyDifEmp1和MyDifEmp2其中一种实现方式
+     -->
+    <!-- public Employee getEmpAndDeptById(Integer id); -->
+    <select id="getEmpAndDeptById" resultMap="MyDifEmp1">
+        <!-- 注意查询字段如果不写*，则要把所有需要的字段列出 -->
+        SELECT e.id,e.last_name,e.email,e.gender,e.dept_id,d.dept_name FROM tbl_employee e, tbl_dept d
+        WHERE e.dept_id=d.id and e.id=#{id}
+    </select>
+    
+    <!-- 一对一关系，实现方式三 -->
+    <resultMap type="com.du.mybatis.bean.Employee" id="MyDifEmp3">
+        <id column="id" property="id"/>
+        <result property="lastName" column="last_name"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <!-- 定义关联对象 -->
+        <association property="dept" column="dept_id" select="com.du.mybatis.dao.DepartmentMapper.getDeptById"></association>
+    </resultMap>
+    
+    <!-- 一对一关系，实现方式四 -->
+    <resultMap type="com.du.mybatis.bean.Employee" id="MyDifEmp4">
+        <id column="id" property="id"/>
+        <result property="lastName" column="last_name"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <!-- 定义关联对象 -->
+        <association property="dept" column="dept_id" select="queryDeptById"></association>
+    </resultMap>
+    <!-- 
+                        分步骤查询：
+        1、根据员工号查询员工信息
+        2、根据员工信息的dept_id信息，在部门表里查询部门信息
+        3、将部门信息放入到员工属性的Department里
+                        
+     -->
+    <!-- public Employee getEmpAndDeptById2(Integer id); -->
+    <select id="getEmpAndDeptById2" resultMap="MyDifEmp4">
+        select id, last_name, email, gender, dept_id from tbl_employee where id=#{id}
+    </select>
+    
+    <select id="queryDeptById" resultType="com.du.mybatis.bean.Department">
+        select id,dept_name departmentName from tbl_dept where id=#{id}
+    </select>
+    
+    
     
     
 </mapper>

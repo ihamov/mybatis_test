@@ -309,4 +309,26 @@ public class MybatisTest {
         
     }
     
+    @Test
+    public void testgetEmployeeAndDeptById() throws IOException{
+        SqlSession sqlSession = getSqlSession();
+        
+        try {
+            EmployeeMapperPlus employeeMapperPlus = sqlSession.getMapper(EmployeeMapperPlus.class);
+            
+            Employee employee = employeeMapperPlus.getEmpAndDeptById(1);
+            Employee employee2 = employeeMapperPlus.getEmpAndDeptById2(1);
+            
+            System.out.println(employee);
+            System.out.println(employee2);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            sqlSession.close();
+        }
+        
+    }
+    
 }

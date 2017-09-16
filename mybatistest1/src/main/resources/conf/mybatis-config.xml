@@ -17,7 +17,7 @@
         <!-- 是否开启自动驼峰命名规则（camel case）映射，
                                         即从经典数据库列名 A_COLUMN 到
                                         经典 Java 属性名 aColumn 的类似映射。 -->
-        <setting name="mapUnderscoreToCamelCase" value="false"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
       </settings>
       
      <!-- 
@@ -54,6 +54,19 @@
 				<property name="password" value="${jdbc.password}" />
 			</dataSource>
 		</environment>
+		
+		<!-- 同时配置多个数据库 -->
+		<!-- 配置oracle数据 -->
+		<!-- <environment id="dev_oracle">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="${orcl.driver}" />
+                <property name="url" value="${orcl.url}" />
+                <property name="username" value="${orcl.username}" />
+                <property name="password" value="${orcl.password}" />
+            </dataSource>
+        </environment> -->
+		
 	</environments>
 	
 	
@@ -79,7 +92,8 @@
 	    -->
 		<mapper resource="mapper/EmployeeMapper.xml" />
 		<mapper resource="mapper/EmployeeMapperPlus.xml"/>
-		<mapper resource="mapper/DepartmentMapper.xml"/>		
+		<mapper resource="mapper/DepartmentMapper.xml"/>
+		<mapper resource="mapper/EmployeeDynamicSqlMapper.xml"/>		
 		<mapper class="com.du.mybatis.dao.EmployeeMapperAnnotation"/>
 	</mappers>
 </configuration>

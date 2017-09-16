@@ -7,6 +7,18 @@ public class Employee {
     private String email;    
     private Department dept;
     
+    public Employee() {
+        super();
+    }
+    public Employee(Integer id, String lastName, String gender, String email,
+            Department dept) {
+        super();
+        this.id = id;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.email = email;
+        this.dept = dept;
+    }
     public Integer getId() {
         return id;
     }

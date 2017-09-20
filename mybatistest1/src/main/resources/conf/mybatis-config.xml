@@ -18,6 +18,9 @@
                                         即从经典数据库列名 A_COLUMN 到
                                         经典 Java 属性名 aColumn 的类似映射。 -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
       </settings>
       
      <!-- 
